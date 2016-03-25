@@ -4,3 +4,5 @@
 # fluentd -c /fluent/fluent.conf -vv
 # fluentd -c /fluent/fluent.conf --use-v1-config >>/var/log/fluentd.log 2>&1
 fluentd -c /fluent/fluent.conf >>/var/log/fluentd.log 2>&1
+
+exec /root/fluentd.start.sh >> /var/log/fluentd.log 2>&1

@@ -1,0 +1,44 @@
+
+
+# Load Balancer not available yet, waiting for NGINX to support UDP
+
+# lb:
+#   image: jwilder/nginx-proxy
+#   links:
+#    - opennti-input-jti
+#   volumes:
+#    - /var/run/docker.sock:/tmp/docker.sock:ro
+#   ports:
+#    - "50000:50000/udp"
+#    - "50020:50020/udp"
+
+open-nti-input-jti:
+  image: juniper/open-nti-input-jti
+  environment:
+   - "INFLUXDB_ADDR=opennti"
+   - "PORT_JTI=50000"
+   - "PORT_ANALYTICSD=50020"
+  expose:
+   - "50000/udp"
+   - "50020/udp"
+   - "24224"
+  external_links:
+   - open-nti_con:opennti
+
+# In case you want to start the main container with docker compose as well
+
+# opennti:
+#   image: juniper/open-nti
+#   # container_name: open-nti_con
+#   entrypoint: /sbin/my_init
+#   restart: always
+#   volumes:
+#    - ./dashboards:/src/dashboards
+#    - ./dashboards:/opt/open-nti/data
+#   ports:
+#    - "8125:8125/udp"
+#    - "6000:6000/udp"
+#    - "80:80"
+#    - "3000:3000"
+#    - "8083:8083"
+#    - "8086:8086"

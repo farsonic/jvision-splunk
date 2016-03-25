@@ -18,16 +18,7 @@
     @type udp
     tag jnpr.jvision
     format juniper_jti
-    port "#{ENV['PORT_JTI']}"
-    bind 0.0.0.0
-</source>
-
-########## Network Agent ################
-<source>
-    @type udp
-    tag jnpr.na
-    format juniper_na
-    port 50010
+    port {{ PORT_JTI }}
     bind 0.0.0.0
 </source>
 
@@ -36,7 +27,7 @@
     @type udp
     tag jnpr.analyticsd
     format juniper_analyticsd
-    port 50020
+    port {{ PORT_ANALYTICSD }}
     bind 0.0.0.0
 </source>
 
@@ -44,24 +35,29 @@
 ## Output     ###
 #################
 
-<match jdebug.**>
-    @type stdout
-    @id stdout_output
-</match>
+# <match jdebug.**>
+#     @type stdout
+#     @id stdout_output
+# </match>
 
 <match jnpr.**>
     type copy
-    # <store>
-    #     @type stdout
-    #     @id stdout_output
-    # </store>
+{% if OUTPUT_STDOUT == 'true' %}
+    <store>
+        @type stdout
+        @id stdout_output
+    </store>
+{% endif %}
+{% if OUTPUT_INFLUXDB == 'true' %}
     <store>
         type influxdb
-        host "#{ENV['INFLUXDB_ADDR']}"
-        port 8086
-        dbname juniper
-        user juniper
-        password juniper
+
+        host "{{ INFLUXDB_ADDR }}"
+        port "{{ INFLUXDB_PORT }}"
+        dbname "{{ INFLUXDB_DB }}"
+        user "{{ INFLUXDB_USER }}"
+        password "{{ INFLUXDB_PWD }}"
+
         value_keys ["value"]
         ####
         buffer_type memory
@@ -72,6 +68,26 @@
         # retry_wait 1.0
         # num_threads 1
     </store>
+{% endif %}
+{% if OUTPUT_KAFKA == 'true' %}
+    <store>
+      @type               kafka
+
+      # Brokers: you can choose either brokers or zookeeper.
+      brokers             {{ KAFKA_ADDR }}:{{ KAFKA_PORT }}
+      # zookeeper           <zookeeper_host>:<zookeeper_port> # Set brokers via Zookeeper
+
+      default_topic       jti
+      # default_partition_key (string)   :default => nil
+      output_data_type    json # |ltsv|msgpack|attr:<record name>|<formatter name>)
+      output_include_tag  true # |false) :default => false
+      output_include_time true # |false) :default => false
+      # max_send_retries    (integer)    :default => 3
+      # required_acks       (integer)    :default => 0
+      # ack_timeout_ms      (integer)    :default => 1500
+      # compression_codec   (none|gzip|snappy) :default => none
+    </store>
+{% endif %}
 </match>
 
 # Listen HTTP for monitoring
