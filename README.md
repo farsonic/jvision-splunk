@@ -1,6 +1,6 @@
 # open-nti-input-jti
 
-Stadalone container running fluentd and Juniper Telemetry plugin.  
+Standalone container running fluentd and Juniper Telemetry plugin.  
 
 This container has been designed to work with the project OpenNTI but it can fit for other projects as well.  
 Multiple type of output are supported and can be defined at launch time:
