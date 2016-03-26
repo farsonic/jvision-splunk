@@ -69,19 +69,23 @@
         # num_threads 1
     </store>
 {% endif %}
+
+## TODO investigate forest plugin https://github.com/tagomoris/fluent-plugin-forest
+
 {% if OUTPUT_KAFKA == 'true' %}
     <store>
-      @type               kafka
+      @type kafka
 
       # Brokers: you can choose either brokers or zookeeper.
-      brokers             {{ KAFKA_ADDR }}:{{ KAFKA_PORT }}
+      brokers               {{ KAFKA_ADDR }}:{{ KAFKA_PORT }}
       # zookeeper           <zookeeper_host>:<zookeeper_port> # Set brokers via Zookeeper
 
-      default_topic       jti
+      default_topic         {{ KAFKA_TOPIC }}
       # default_partition_key (string)   :default => nil
-      output_data_type    json # |ltsv|msgpack|attr:<record name>|<formatter name>)
-      output_include_tag  true # |false) :default => false
-      output_include_time true # |false) :default => false
+      output_data_type      {{ KAFKA_DATA_TYPE }} # |ltsv|msgpack|attr:<record name>|<formatter name>)
+      output_include_tag    true # |false) :default => false
+      output_include_time   true # |false) :default => false
+
       # max_send_retries    (integer)    :default => 3
       # required_acks       (integer)    :default => 0
       # ack_timeout_ms      (integer)    :default => 1500

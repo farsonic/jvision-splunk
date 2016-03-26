@@ -50,7 +50,7 @@ RUN     mkdir /root/fluent
 
 RUN     mkdir /etc/fluent && \
         mkdir /etc/fluent/plugin
-        
+
 ADD     fluentd/plugin/out_influxdb.rb       /etc/fluent/plugin/out_influxdb.rb
 ADD     fluentd/plugin/out_statsd.rb         /etc/fluent/plugin/out_statsd.rb
 
@@ -82,7 +82,9 @@ ENV OUTPUT_KAFKA=false \
     INFLUXDB_USER=juniper \
     INFLUXDB_PWD=juniper \
     KAFKA_ADDR=localhost \
-    KAFKA_PORT=9092
+    KAFKA_PORT=9092 \
+    KAFKA_DATA_TYPE=json \
+    KAFKA_TOPIC=jnpr.jvision
 
 EXPOSE 24220
 
