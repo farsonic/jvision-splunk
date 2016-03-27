@@ -15,7 +15,7 @@ RUN     apt-get -y update && \
 
 # Latest version
 ENV FLUENTD_VERSION 0.12.20
-ENV FLUENTD_JUNIPER_VERSION 0.2.8-beta
+ENV FLUENTD_JUNIPER_VERSION 0.2.8
 
 RUN     apt-get -y update && \
         apt-get -y install \
@@ -25,7 +25,6 @@ RUN     apt-get -y update && \
             ruby-dev \
             python-dev \
             python-pip
-
 
 ########################
 ### Install Fluentd  ###
@@ -40,9 +39,10 @@ RUN     gem install --no-ri --no-rdoc \
             bundler \
             protobuf \
             statsd-ruby \
-            dogstatsd-ruby
-
-RUN     gem install fluent-plugin-kafka
+            dogstatsd-ruby \
+            fluent-plugin-kafka && \
+        gem install --no-ri --no-rdoc \
+            fluent-plugin-juniper-telemetry -v ${FLUENTD_JUNIPER_VERSION}
 
 RUN     pip install envtpl
 
@@ -53,12 +53,6 @@ RUN     mkdir /etc/fluent && \
 
 ADD     fluentd/plugin/out_influxdb.rb       /etc/fluent/plugin/out_influxdb.rb
 ADD     fluentd/plugin/out_statsd.rb         /etc/fluent/plugin/out_statsd.rb
-
-WORKDIR /tmp
-RUN     wget -O /tmp/fluent-plugin-juniper-telemetry.tar.gz https://github.com/JNPRAutomate/fluent-plugin-juniper-telemetry/archive/v${FLUENTD_JUNIPER_VERSION}.tar.gz &&\
-        tar -xzf /tmp/fluent-plugin-juniper-telemetry.tar.gz                &&\
-        cd /tmp/fluent-plugin-juniper-telemetry-${FLUENTD_JUNIPER_VERSION}  &&\
-        rake install
 
 WORKDIR /root
 ENV HOME /root
