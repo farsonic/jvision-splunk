@@ -15,7 +15,7 @@ RUN     apt-get -y update && \
 
 # Latest version
 ENV FLUENTD_VERSION 0.12.20
-ENV FLUENTD_JUNIPER_VERSION 0.2.8
+ENV FLUENTD_JUNIPER_VERSION 0.2.10
 
 RUN     apt-get -y update && \
         apt-get -y install \
