@@ -111,7 +111,13 @@ def start_open_nti():
 
 def stop_open_nti():
     global c
-    global OPENNTI_CID
+    # Force Stop and delete existing container if exist
+    try:
+        old_container_id = c.inspect_container(OPENNTI_C_NAME)['Id']
+        c.stop(container=old_container_id)
+        c.remove_container(container=old_container_id)
+    except:
+        print "Container do not exit"
 
 def get_influxdb_handle():
     global INFLUXDB_HANDLE
@@ -343,15 +349,13 @@ def test_jti_structured_ifd_01():
 def teardown_module(module):
     global c
 
-    # Delete all files in /tests/output/
-    # if not os.getenv('TRAVIS'):
-    #     stop_fluentd()
-    #
-    #     cleanup_test_output()
-    #
-    #     try:
-    #         old_container_id = c.inspect_container(TCP_RELAY_CONTAINER_NAME)['Id']
-    #         c.stop(container=old_container_id)
-    #         c.remove_container(container=old_container_id)
-    #     except:
-    #         print "Container do not exit"
+    if not os.getenv('TRAVIS'):
+        stop_fluentd()
+        stop_open_nti()
+
+        try:
+            old_container_id = c.inspect_container(TCP_RELAY_CONTAINER_NAME)['Id']
+            c.stop(container=old_container_id)
+            c.remove_container(container=old_container_id)
+        except:
+            print "Container do not exit"
