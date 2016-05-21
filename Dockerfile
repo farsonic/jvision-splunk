@@ -1,69 +1,45 @@
-FROM phusion/baseimage:0.9.18
+FROM fluent/fluentd:v0.12.24
 MAINTAINER Damien Garros <dgarros@gmail.com>
 
-RUN     apt-get -y update && \
-        apt-get -y upgrade && \
-        apt-get clean   &&\
-        rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-
-# dependencies
-RUN     apt-get -y update && \
-        apt-get -y install \
-        git adduser libfontconfig wget make curl  && \
-        apt-get clean   &&\
-        rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-
-# Latest version
-ENV FLUENTD_VERSION 0.12.20
 ENV FLUENTD_JUNIPER_VERSION 0.2.11
 
-RUN     apt-get -y update && \
-        apt-get -y install \
-            build-essential \
-            tcpdump \
-            ruby \
-            ruby-dev \
-            python-dev \
-            python-pip
+USER root
+WORKDIR /home/fluent
 
-########################
-### Install Fluentd  ###
-########################
+## Install python
+RUN apk update \
+    && apk add python-dev py-pip \
+    && pip install --upgrade pip \
+    && pip install envtpl \
+    && apk del -r --purge gcc make g++ \
+    && rm -rf /var/cache/apk/*
 
-# RUN     gem install fluentd fluent-plugin-influxdb --no-ri --no-rdoc
-RUN     gem install --no-ri --no-rdoc \
-            fluentd -v ${FLUENTD_VERSION} && \
-        gem install --no-ri --no-rdoc \
-            influxdb \
-            rake \
-            bundler \
-            protobuf \
-            statsd-ruby \
-            dogstatsd-ruby \
-            fluent-plugin-kafka && \
-        gem install --no-ri --no-rdoc \
+ENV PATH /home/fluent/.gem/ruby/2.2.0/bin:$PATH
+
+RUN apk --no-cache --update add \
+                            build-base \
+                            ruby-dev && \
+    echo 'gem: --no-document' >> /etc/gemrc && \
+    gem install --no-ri --no-rdoc \
+              influxdb \
+              protobuf \
+              statsd-ruby \
+              dogstatsd-ruby \
+              fluent-plugin-kafka \
+              bigdecimal && \
+    apk del build-base ruby-dev && \
+    rm -rf /tmp/* /var/tmp/* /var/cache/apk/*
+
+RUN gem install --no-ri --no-rdoc \
             fluent-plugin-juniper-telemetry -v ${FLUENTD_JUNIPER_VERSION}
 
-RUN     pip install envtpl
+# Copy Start script to generate configuration dynamically
+ADD     fluentd-alpine.start.sh         fluentd-alpine.start.sh
+RUN     chown -R fluent:fluent fluentd-alpine.start.sh
+RUN     chmod 777 fluentd-alpine.start.sh
 
-RUN     mkdir /root/fluent
-
-RUN     mkdir /etc/fluent && \
-        mkdir /etc/fluent/plugin
-
-ADD     fluentd/plugin/out_influxdb.rb       /etc/fluent/plugin/out_influxdb.rb
-ADD     fluentd/plugin/out_statsd.rb         /etc/fluent/plugin/out_statsd.rb
-
-WORKDIR /root
-ENV HOME /root
-
-ADD     fluentd/fluentd.launcher.sh /etc/service/fluentd/run
-RUN     chmod +x /etc/service/fluentd/run
-
-ADD     fluentd/fluentd.start.sh /root/fluentd.start.sh
-RUN     chmod +x /root/fluentd.start.sh
-
-RUN     chmod -R 777 /var/log/
+USER fluent
+EXPOSE 24284
 
 ENV OUTPUT_KAFKA=false \
     OUTPUT_INFLUXDB=true \
@@ -75,11 +51,10 @@ ENV OUTPUT_KAFKA=false \
     INFLUXDB_DB=juniper \
     INFLUXDB_USER=juniper \
     INFLUXDB_PWD=juniper \
+    INFLUXDB_FLUSH_INTERVAL=2 \
     KAFKA_ADDR=localhost \
     KAFKA_PORT=9092 \
     KAFKA_DATA_TYPE=json \
     KAFKA_TOPIC=jnpr.jvision
 
-EXPOSE 24220
-
-CMD ["/sbin/my_init"]
+CMD /home/fluent/fluentd-alpine.start.sh
