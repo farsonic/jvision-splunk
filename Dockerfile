@@ -25,7 +25,7 @@ RUN apk --no-cache --update add \
               protobuf \
               statsd-ruby \
               dogstatsd-ruby \
-              fluent-plugin-kafka \
+              ruby-kafka yajl ltsv zookeeper \
               bigdecimal && \
     apk del build-base ruby-dev && \
     rm -rf /tmp/* /var/tmp/* /var/cache/apk/*
