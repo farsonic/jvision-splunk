@@ -42,7 +42,7 @@ KAFKA_ADDR: localhost
 KAFKA_PORT: 9092
 
 ## Information for JSON Output plugin. 
-JSON_ADDR: 192.168.0.100
+JSON_ADDR: localhost
 JSON_PORT: 9997
 ```
 
