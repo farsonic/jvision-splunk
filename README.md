@@ -49,7 +49,7 @@ JSON_PORT: 9997
 Here is an example to define an environment variable. Typically the JVISION input is expected to be listening on port 50000 which is the default, however this could be changed, especially for testing using external PCAP Files. 
 
 ```
-docker run -e JSON_Host='10.4.5.6' -e PORT_JTI='40000' -it  juniper/open-nti-json-output
+docker run -e JSON_ADDR='10.4.5.6' -e PORT_JTI='40000' -it  juniper/open-nti-json-output
 ```
 
 ## Splunk Configuration
