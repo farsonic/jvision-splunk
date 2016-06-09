@@ -9,6 +9,12 @@ This container has been based on the  OpenNTI project and has been tested with S
 - Kafka
 - Stdout
 
+## Install 
+
+git clone https://github.com/farsonic/jvision-splunk.git
+cd jvision-splunk
+./docker.build.sh
+
 ## Environment variables
 
 Parameters can be overwritten using environment variables define at launch time.   
