@@ -22,6 +22,7 @@ RUN apk --no-cache --update add \
     echo 'gem: --no-document' >> /etc/gemrc && \
     gem install --no-ri --no-rdoc \
               influxdb \
+              fluent-plugin-splunk-ex\
               protobuf \
               statsd-ruby \
               dogstatsd-ruby \
