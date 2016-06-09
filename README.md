@@ -1,15 +1,14 @@
-# open-nti-input-jti
+# open-nti-json-output
 
-Standalone container running fluentd and Juniper Telemetry plugin.  
+Standalone container running fluentd, fluent-plugin-splunk-ex and the Juniper Telemetry plugin.  
 
-This container has been designed to work with the project OpenNTI but it can fit for other projects as well.  
+This container has been based on the  OpenNTI project and has been tested with SPLUNK as the upstream collector.   
 Multiple type of output are supported and can be defined at launch time:
-- Influxdb (default)
+
+- JSON Output (Default)
+- Influxdb 
 - Kafka
 - Stdout
-
-This container can run in standalone mode or it can you can run multiple behind a load-balancer using docker-compose.
-A docker-compose configuration file is (not yet) provided.
 
 ## Environment variables
 
@@ -35,24 +34,16 @@ INFLUXDB_PWD: juniper
 ## Information for Kafka
 KAFKA_ADDR: localhost
 KAFKA_PORT: 9092
+
+## Information for JSON Output plugin. 
+JSON_Host: 192.168.0.100
+JSON_Port: 9997
 ```
 
-Here is an example to define an environment variable
+Here is an example to define an environment variable. Typically the JVISION input is expected to be listening on port 50000 which is the default, however this could be changed, especially for testing using external PCAP Files. 
+
 ```
-docker run -d -e INFLUXDB_ADDR='localhost' -i juniper/open-nti-input-jti
+docker run -e JSON_Host='10.4.5.6' -e PORT_JTI='40000' -it  juniper/open-nti-json-output
 ```
 
-## Docker Compose
-
-> The Load Balancer is not yet part of the docker-compose file
-> For now, it's recommended to use https://hub.docker.com/r/eslam/pen/
-
-To start
-```
-docker-compose up -d
-```
-
-If you want to increase or decrease the number of netflow container, you can use `docker-compose scale`
-```
-docker-compose scale open-nti-input-jti=5
-```
+## Splunk Configuration
