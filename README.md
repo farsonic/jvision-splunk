@@ -42,8 +42,8 @@ KAFKA_ADDR: localhost
 KAFKA_PORT: 9092
 
 ## Information for JSON Output plugin. 
-JSON_Host: 192.168.0.100
-JSON_Port: 9997
+JSON_ADDR: 192.168.0.100
+JSON_PORT: 9997
 ```
 
 Here is an example to define an environment variable. Typically the JVISION input is expected to be listening on port 50000 which is the default, however this could be changed, especially for testing using external PCAP Files. 
