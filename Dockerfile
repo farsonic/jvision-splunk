@@ -13,7 +13,7 @@ RUN apk update \
     && pip install envtpl \
     && apk del -r --purge gcc make g++ \
     && rm -rf /var/cache/apk/*
-      
+
 
 ENV PATH /home/fluent/.gem/ruby/2.2.0/bin:$PATH
 
@@ -22,12 +22,8 @@ RUN apk --no-cache --update add \
                             ruby-dev && \
     echo 'gem: --no-document' >> /etc/gemrc && \
     gem install --no-ri --no-rdoc \
-              influxdb \
-              fluent-plugin-splunk-ex\
+              fluent-plugin-splunk-ex \
               protobuf \
-              statsd-ruby \
-              dogstatsd-ruby \
-              ruby-kafka yajl ltsv zookeeper \
               bigdecimal && \
     apk del build-base ruby-dev && \
     rm -rf /tmp/* /var/tmp/* /var/cache/apk/*
