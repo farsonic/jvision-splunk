@@ -12,7 +12,7 @@ Multiple type of output are supported and can be defined at launch time:
 
 ## Environment variables
 
-So parameters can be overwritten using environment variables define at launch time.   
+Parameters can be overwritten using environment variables define at launch time.   
 Here is the list of variables available with their default value.
 
 ```yaml
