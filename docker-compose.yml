@@ -13,7 +13,7 @@
 #    - "50020:50020/udp"
 
 open-nti-input-jti:
-  image: juniper/open-nti-input-jti
+  image: juniper/open-nti-json-output
   environment:
    - "JSON_HOST=192.168.0.100"
    - "JSON_PORT=9997"
