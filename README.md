@@ -22,8 +22,9 @@ Here is the list of variables available with their default value.
 
 ```yaml
 OUTPUT_KAFKA: false
-OUTPUT_INFLUXDB: true
+OUTPUT_INFLUXDB: false
 OUTPUT_STDOUT: false
+OUTPUT_JSON: true
 
 ## Ports Numbers for Juniper Telemetry Input Plugins
 PORT_JTI: 50000
