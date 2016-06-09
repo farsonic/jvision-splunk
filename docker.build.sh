@@ -2,4 +2,4 @@
 
 #Load params file with all variables
 
-docker build -t juniper/open-nti-input-jti .
+docker build -t juniper/open-nti-json-output .
