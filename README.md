@@ -2,8 +2,7 @@
 
 Standalone container running fluentd, fluent-plugin-splunk-ex and the Juniper Telemetry plugin.  
 
-This container has been based on the  OpenNTI project and has been tested with SPLUNK as the upstream collector.   
-Multiple type of output are supported and can be defined at launch time:
+This container has been based on the  OpenNTI project and has been tested with SPLUNK as the upstream collector. This should also function with other SIEM products that accept JSON input. Multiple type of output are supported and can be defined at launch time:
 
 - JSON Output (Default)
 - Influxdb 
