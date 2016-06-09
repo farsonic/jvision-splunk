@@ -44,8 +44,9 @@ USER fluent
 EXPOSE 24284
 
 ENV OUTPUT_KAFKA=false \
-    OUTPUT_INFLUXDB=true \
+    OUTPUT_INFLUXDB=false \
     OUTPUT_STDOUT=false \
+    OUTPUT_JSON=true\
     PORT_JTI=50000 \
     PORT_ANALYTICSD=50020 \
     INFLUXDB_ADDR=localhost \
