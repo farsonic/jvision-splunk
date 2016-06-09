@@ -11,9 +11,9 @@ This container has been based on the  OpenNTI project and has been tested with S
 
 ## Install 
 
-git clone https://github.com/farsonic/jvision-splunk.git
-cd jvision-splunk
-./docker.build.sh
+git clone https://github.com/farsonic/jvision-splunk.git  <br />
+cd jvision-splunk                                         <br />
+./docker.build.sh                                         <br />
 
 ## Environment variables
 
