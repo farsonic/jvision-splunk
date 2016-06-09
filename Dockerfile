@@ -13,6 +13,14 @@ RUN apk update \
     && pip install envtpl \
     && apk del -r --purge gcc make g++ \
     && rm -rf /var/cache/apk/*
+    
+RUN     apt-get -y update && \
+        apt-get -y install \
+            tcpdump \
+            bash && \
+        apt-get clean   &&\
+        rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+        
 
 ENV PATH /home/fluent/.gem/ruby/2.2.0/bin:$PATH
 
