@@ -47,3 +47,7 @@ docker run -e JSON_Host='10.4.5.6' -e PORT_JTI='40000' -it  juniper/open-nti-jso
 ```
 
 ## Splunk Configuration
+
+Splunk needs to be configured to accept JSON Packets for TCP on the Port defined as the environment variable JSON_Port. To make the required change configure Settings --> Data Inputs --> (Type) TCP. 
+
+
